@@ -1,112 +1,51 @@
 import React, { useState, useEffect } from "react";
-import {
-    Camera,
-    Eye,
-    Heart,
-    Share2,
-    Filter,
-    Grid,
-    List,
-    X,
-    ChevronLeft,
-    ChevronRight,
-} from "lucide-react";
+import { Camera, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 function Portfolio() {
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [viewMode, setViewMode] = useState("grid");
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Simulate loading
-        const timer = setTimeout(() => setIsLoading(false), 1000);
+        // simulate loading
+        const timer = setTimeout(() => setIsLoading(false), 700);
         return () => clearTimeout(timer);
     }, []);
 
     const categories = [
-        { id: "all", name: "All Work", count: 24 },
-        { id: "executive", name: "Executive Portraits", count: 8 },
-        { id: "corporate", name: "Corporate Events", count: 6 },
-        { id: "branding", name: "Personal Branding", count: 5 },
-        { id: "headshots", name: "Professional Headshots", count: 5 },
+        { id: "all", name: "All Courses" },
+        { id: "development", name: "Development" },
+        { id: "design", name: "Design" },
+        { id: "data", name: "Data" },
     ];
 
-    const portfolioItems = [
-        {
-            id: 1,
-            title: "title 1",
-            image: "/images/photo-1.webp",
-        },
-        {
-            id: 2,
-            title: "title 2",
-            image: "/images/photo-2.webp",
-        },
-        {
-            id: 3,
-            title: "title 3",
-            image: "/images/photo-3.webp",
-        },
-        {
-            id: 4,
-            title: "title 4",
-            image: "/images/photo-4.webp",
-        },
-        {
-            id: 5,
-            title: "title 5",
-            image: "/images/photo-5.webp",
-        },
-        {
-            id: 6,
-            title: "title 6",
-            image: "/images/photo-6.webp",
-        },
-        {
-            id: 7,
-            title: "title 7",
-            image: "/images/photo-7.webp",
-        },
-        {
-            id: 8,
-            title: "title 8",
-            image: "/images/photo-8.webp",
-        },
-        {
-            id: 9,
-            title: "title 9",
-            image: "/images/photo-9.webp",
-        },
+    const courses = [
+        { id: 1, title: "Intro to React", instructor: "Alice", seats: 30, category: "development", image: "/images/react.png", description: "Components, hooks, state and project-based learning." },
+        { id: 2, title: "Advanced JavaScript", instructor: "Bob", seats: 25, category: "development", image: "/images/js.png", description: "In-depth JavaScript: closures, async patterns, performance." },
+        { id: 3, title: "UI/UX Fundamentals", instructor: "Carol", seats: 20, category: "design", image: "/images/photo-3.webp", description: "Design thinking, prototyping and accessibility best practices." },
+        { id: 4, title: "Data Structures", instructor: "Dan", seats: 18, category: "data", image: "/images/photo-4.webp", description: "Core algorithms, data structures and complexity analysis." },
+        { id: 5, title: "Frontend Testing", instructor: "Eve", seats: 22, category: "development", image: "/images/photo-5.webp", description: "Testing with Jest, React Testing Library and E2E basics." },
     ];
 
-    const filteredItems =
-        selectedCategory === "all"
-            ? portfolioItems
-            : portfolioItems.filter(
-                (item) => item.category === selectedCategory
-            );
+    const filteredItems = selectedCategory === "all" ? courses : courses.filter((c) => c.category === selectedCategory);
 
-    const openLightbox = (item, index) => {
-        setSelectedImage(item);
-        setCurrentImageIndex(index);
+    const openDetails = (course, index) => {
+        setSelectedCourse(course);
+        setCurrentIndex(index);
     };
 
-    const closeLightbox = () => {
-        setSelectedImage(null);
-        setCurrentImageIndex(0);
+    const closeDetails = () => {
+        setSelectedCourse(null);
+        setCurrentIndex(0);
     };
 
-    const navigateImage = (direction) => {
-        const newIndex =
-            direction === "next"
-                ? (currentImageIndex + 1) % filteredItems.length
-                : (currentImageIndex - 1 + filteredItems.length) %
-                filteredItems.length;
-
-        setCurrentImageIndex(newIndex);
-        setSelectedImage(filteredItems[newIndex]);
+    const navigate = (direction) => {
+        if (!filteredItems.length) return;
+        const newIndex = direction === "next" ? (currentIndex + 1) % filteredItems.length : (currentIndex - 1 + filteredItems.length) % filteredItems.length;
+        setCurrentIndex(newIndex);
+        setSelectedCourse(filteredItems[newIndex]);
     };
 
     if (isLoading) {
@@ -114,7 +53,7 @@ function Portfolio() {
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-cyan-900 flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-white text-lg">Loading Portfolio...</p>
+                    <p className="text-white text-lg">Loading Courses...</p>
                 </div>
             </div>
         );
@@ -122,111 +61,84 @@ function Portfolio() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-cyan-900">
-            {/* Hero Section */}
-            <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+            <section className="pt-24 pb-8 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto text-center">
                     <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 border border-white/20 mb-6">
                         <Camera className="w-4 h-4 text-cyan-400" />
-                        <span className="text-sm font-medium text-cyan-100">
-                            Professional Portfolio
-                        </span>
+                        <span className="text-sm font-medium text-cyan-100">Course Catalog</span>
                     </div>
 
-                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6">
-                        Our{" "}
-                        <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                            Portfolio
-                        </span>
-                    </h1>
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6">Our <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">Courses</span></h1>
 
-                    <p className="text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed mb-8">
-                        Discover our collection of professional photography
-                        work, showcasing executive portraits, corporate events,
-                        and personal branding sessions that elevate your
-                        professional image.
-                    </p>
+                    <p className="text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed mb-6">Browse available courses, view details, and add courses to your dashboard for quick access.</p>
 
-                    <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full mx-auto"></div>
+                    <div className="flex items-center justify-center gap-3 mb-6">
+                        {categories.map((cat) => (
+                            <button key={cat.id} onClick={() => setSelectedCategory(cat.id)} className={`px-4 py-2 rounded-full text-sm ${selectedCategory === cat.id ? 'bg-cyan-500 text-white' : 'bg-white/5 text-slate-200'}`}>{cat.name}</button>
+                        ))}
+                    </div>
                 </div>
             </section>
 
-
-            {/* Portfolio Grid */}
             <section className="px-4 sm:px-6 lg:px-8 pb-20">
                 <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-3 gap-4 gap-lg-6">
-                        {filteredItems.map((item, index) => (
-                            <div
-                                key={item.id}
-                                className="group relative bg-white/5 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-400/50 transition-all duration-500 hover:scale-105 cursor-pointer"
-                                onClick={() => openLightbox(item, index)}
-                            >
-                                <div className="aspect-square overflow-hidden">
-                                    <img
-                                        src={item.image}
-                                        alt={item.title}
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredItems.map((course, index) => (
+                            <div key={course.id} className="group relative bg-white/5 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-400/50 transition-all duration-500 hover:scale-105 cursor-pointer" onClick={() => openDetails(course, index)}>
+                                <div className="aspect-video overflow-hidden">
+                                    <img src={course.image} alt={course.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                                 </div>
-
+                                <div className="p-4">
+                                    <div className="font-semibold text-lg text-white">{course.title}</div>
+                                    <div className="text-sm text-slate-300">Instructor: {course.instructor} • Seats: {course.seats}</div>
+                                    <p className="mt-2 text-sm text-slate-300 line-clamp-3">{course.description}</p>
+                                    <div className="mt-4 flex items-center justify-between">
+                                        <div className="text-xs text-slate-400">Category: {course.category}</div>
+                                        <button onClick={(e) => { e.stopPropagation(); openDetails(course, index); }} className="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-1 rounded-lg text-sm">Details</button>
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* Lightbox Modal */}
-            {selectedImage && (
+            {selectedCourse && (
                 <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center px-4">
-                    <div className="relative max-w-6xl w-full max-h-full h-full py-4">
-                        {/* Close Button */}
-                        <button
-                            onClick={closeLightbox}
-                            className="absolute top-4 right-4 z-10 bg-white/10 backdrop-blur-md rounded-full p-2 text-white hover:bg-white/20 transition-colors duration-300"
-                        >
-                            <X className="w-6 h-6" />
-                        </button>
+                    <div className="relative max-w-4xl w-full max-h-full overflow-auto py-6">
+                        <button onClick={closeDetails} className="absolute top-4 right-4 z-10 bg-white/10 backdrop-blur-md rounded-full p-2 text-white hover:bg-white/20 transition-colors duration-300"><X className="w-6 h-6" /></button>
 
-                        {/* Navigation Buttons */}
-                        <button
-                            onClick={() => navigateImage("prev")}
-                            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/10 backdrop-blur-md rounded-full p-3 text-white hover:bg-white/20 transition-colors duration-300"
-                        >
-                            <ChevronLeft className="w-6 h-6" />
-                        </button>
-                        <button
-                            onClick={() => navigateImage("next")}
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/10 backdrop-blur-md rounded-full p-3 text-white hover:bg-white/20 transition-colors duration-300"
-                        >
-                            <ChevronRight className="w-6 h-6" />
-                        </button>
+                        <button onClick={() => navigate('prev')} className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/10 backdrop-blur-md rounded-full p-3 text-white hover:bg-white/20 transition-colors duration-300"><ChevronLeft className="w-6 h-6" /></button>
+                        <button onClick={() => navigate('next')} className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/10 backdrop-blur-md rounded-full p-3 text-white hover:bg-white/20 transition-colors duration-300"><ChevronRight className="w-6 h-6" /></button>
 
-                        {/* Image */}
-                        <div className="flex items-center justify-center h-full">
-                            <img
-                                src={selectedImage.image}
-                                alt={selectedImage.title}
-                                className="max-w-full max-h-full object-contain rounded-"
-                                style={{ maxHeight: "calc(100svh - 48px)" }}
-                            />
+                        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+                            <div className="md:flex">
+                                <div className="md:w-1/2">
+                                    <img src={selectedCourse.image} alt={selectedCourse.title} className="w-full h-64 md:h-full object-cover" />
+                                </div>
+                                <div className="p-6 md:w-1/2">
+                                    <h2 className="text-2xl font-bold text-white">{selectedCourse.title}</h2>
+                                    <div className="text-slate-300 mt-2">Instructor: {selectedCourse.instructor}</div>
+                                    <div className="text-slate-300">Seats: {selectedCourse.seats}</div>
+                                    <p className="mt-4 text-slate-200">{selectedCourse.description}</p>
+
+                                    <div className="mt-6 flex gap-3">
+                                        <a href="/dashboard" className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg">Enroll Now</a>
+                                        <button onClick={closeDetails} className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg">Close</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* Call to Action */}
             <section className="px-4 sm:px-6 lg:px-8 pb-20">
                 <div className="max-w-4xl mx-auto text-center bg-gradient-to-r from-cyan-500/10 to-blue-600/10 backdrop-blur-md rounded-3xl p-8 lg:p-12 border border-cyan-400/20">
-                    <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-                        Ready to Rebuild Your Brand?
-                    </h2>
-                    <p className="text-xl text-slate-200 mb-8">
-                        Let's capture a photograph that elevates your brand.
-                    </p>
+                    <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Ready to manage courses?</h2>
+                    <p className="text-xl text-slate-200 mb-8">Add courses to your dashboard or start a learning plan now.</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25" href="sms:+14195462226" target="_blank">
-                           TEXT ME 419-546-2226
-                        </a>
+                        <a className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:scale-105" href="/dashboard">Open Dashboard</a>
                     </div>
                 </div>
             </section>
