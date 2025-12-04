@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        font-family: "Inter", system-ui, sans-serif;
+    }
+}
+
+@layer components {
+    .btn-primary {
+        @apply bg-blue-lagoon-500 hover:bg-blue-lagoon-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300;
+    }
+
+    .btn-secondary {
+        @apply bg-white/20 hover:bg-white/30 text-white font-medium py-2 px-4 rounded-full backdrop-blur-sm border border-white/20 transition-all duration-300;
+    }
+
+    .form-input {
+        @apply w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-lagoon-500 focus:outline-none transition-colors duration-300;
+    }
+
+    .form-label {
+        @apply block text-xs font-semibold text-blue-lagoon-600 uppercase tracking-wider mb-2;
+    }
+}
